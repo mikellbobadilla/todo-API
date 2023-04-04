@@ -1,0 +1,16 @@
+version: '3.1'
+services:
+  database:
+    image: mysql
+    container_name: todo-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: holaroot
+      MYSQL_DATABASE: todo
+      MYSQL_USER: spring
+      MYSQL_PASSWORD: helloWorld
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./mysql:/var/lib/mysql
+    
