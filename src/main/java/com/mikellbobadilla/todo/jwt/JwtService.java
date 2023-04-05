@@ -43,7 +43,7 @@ public class JwtService {
     }
 
     private Key getSignInKey(){
-        String secretKey = "h6HJH1YPCl37SVuzQBBC8g==";
+        String secretKey = "TF4f0sK4HEoOuDCeklOqiaKwXgqxQXnDRju3Y+tlUWVODtUqCa80W1WkFlXnsXrv5Qq0hMAuf4vYW83GEZDuA3QJ5kANQEKHqYAwi0ZHiMpjgfNMILm3E7sD04vZq/HS2JIifyDNfZq7CVtvgZdtOgOkXbj1gAAYfMP0+kSL4oIoxpwXsdEUIcwMPJHstp+AN1HCM8EGPR0aMoxF4nQeYOZxo2XeHlbe/q+pteS+8tSrqSK6Hw0pfJnzuhA4ubxNpgYc6GFiVaJHa53ckBhSZBc1upOocdmKUP7DvTURh6SIsi8fy/EsjSAisq2ikNqgdlOYaejKY+cvNODA62u4";
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
