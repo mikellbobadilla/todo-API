@@ -4,8 +4,12 @@ import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Date;
@@ -22,15 +26,19 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> badCredentialsException(BadCredentialsException exc){
+    public ResponseEntity<ErrorResponse> badCredentialsException(AuthenticationException exc){
         return buildResponseEntity(exc, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> notFoundException(UsernameNotFoundException exc){
-        return buildResponseEntity(exc, HttpStatus.NOT_FOUND);
-    }
+//    @ExceptionHandler
+//    public ResponseEntity<ErrorResponse> notFoundException(HttpClientErrorException.NotFound exc){
+//        return buildResponseEntity(exc, HttpStatus.NOT_FOUND);
+//    }
 
+//    @ExceptionHandler(value = NoHandlerFoundException.class)
+//    public ResponseEntity<ErrorResponse> exceptionGeneric(NoHandlerFoundException exc){
+//        return buildResponseEntity(exc, HttpStatus.NOT_FOUND);
+//    }
 
     private ResponseEntity<Map<Object, Object>> buildResponseEntity(String message, HttpStatus httpStatus){
         Map<Object, Object> map = new HashMap<>();
