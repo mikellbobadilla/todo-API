@@ -1,28 +1,26 @@
 package com.mikellbobadilla.todo.exceptions;
 
-import org.slf4j.Logger;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @ControllerAdvice
-public class ApiExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity<Map<Object, Object>> duplicateEntry(SQLIntegrityConstraintViolationException exc){
-
-        return buildResponseEntity("This user already exists", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> duplicateEntry(SQLIntegrityConstraintViolationException exc){
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.BAD_REQUEST,
+                "This account already exists",
+                new Date());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
@@ -30,23 +28,16 @@ public class ApiExceptionHandler {
         return buildResponseEntity(exc, HttpStatus.FORBIDDEN);
     }
 
-//    @ExceptionHandler
-//    public ResponseEntity<ErrorResponse> notFoundException(HttpClientErrorException.NotFound exc){
-//        return buildResponseEntity(exc, HttpStatus.NOT_FOUND);
-//    }
-
-//    @ExceptionHandler(value = NoHandlerFoundException.class)
-//    public ResponseEntity<ErrorResponse> exceptionGeneric(NoHandlerFoundException exc){
-//        return buildResponseEntity(exc, HttpStatus.NOT_FOUND);
-//    }
-
-    private ResponseEntity<Map<Object, Object>> buildResponseEntity(String message, HttpStatus httpStatus){
-        Map<Object, Object> map = new HashMap<>();
-        map.put("httpStatus", httpStatus);
-        map.put("message", message);
-        map.put("timestamp", new Date());
-        return new ResponseEntity<>(map, httpStatus);
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> pageNotFoundException(PageNotFoundException exc){
+        return buildResponseEntity(exc, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = ExpiredJwtException.class)
+    public ResponseEntity<ErrorResponse> jwtException(ExpiredJwtException exc){
+        return buildResponseEntity(exc, HttpStatus.BAD_REQUEST);
+    }
+
     private ResponseEntity<ErrorResponse> buildResponseEntity(Exception exp, HttpStatus httpStatus){
         ErrorResponse error = new ErrorResponse(httpStatus, exp.getMessage(), new Date());
         return new ResponseEntity<>(error, httpStatus);
