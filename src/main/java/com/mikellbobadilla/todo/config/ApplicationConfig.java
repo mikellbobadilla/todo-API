@@ -1,11 +1,9 @@
 package com.mikellbobadilla.todo.config;
 
-import com.mikellbobadilla.todo.exceptions.PageNotFoundException;
 import com.mikellbobadilla.todo.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,9 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Configuration
 @AllArgsConstructor
@@ -46,12 +41,5 @@ public class ApplicationConfig {
         provider.setUserDetailsService(userDetailsService());
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
-    }
-
-
-
-    @RequestMapping("*")
-    public void pageNotFoundHandler(){
-        throw new PageNotFoundException("this Page does not exists");
     }
 }

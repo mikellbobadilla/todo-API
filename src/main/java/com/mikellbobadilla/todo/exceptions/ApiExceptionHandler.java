@@ -28,11 +28,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(exc, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> pageNotFoundException(PageNotFoundException exc){
-        return buildResponseEntity(exc, HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(value = ExpiredJwtException.class)
     public ResponseEntity<ErrorResponse> jwtException(ExpiredJwtException exc){
         return buildResponseEntity(exc, HttpStatus.BAD_REQUEST);
